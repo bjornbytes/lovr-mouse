@@ -6,8 +6,7 @@ A mouse module for LÖVR.
 Usage
 ---
 
-Copy `lovr-mouse.lua` to your project and require it.  I like to put it on the `lovr` global so
-I can treat it like any other module:
+Copy `lovr-mouse.lua` to your project and require it.  I like to put it on the `lovr` global like this:
 
 ```lua
 lovr.mouse = require 'lovr-mouse'
