@@ -22,12 +22,18 @@ API
 - `mouse.getX()` Returns the x position of the cursor.
 - `mouse.getY()` Returns the y position of the cursor.
 - `mouse.getPosition()` Returns the x and y position of the cursor.
+- `mouse.setX(x)` Sets the x position of the cursor.
+- `mouse.getY(y)` Sets the y position of the cursor.
+- `mouse.setPosition(x, y)` Sets the position of the cursor.
 - `mouse.isDown(button, ...)` Returns whether any of the specified buttons are currently pressed.
   Available buttons:
   - `1` the left mouse button.
   - `2` the right mouse button.
   - `3` the middle mouse button.
   - Other higher numbers may be supported for fancier mice.
+- `mouse.setRelativeMode(enable)` Sets or disables relative mode.  In relative mode the cursor is
+  hidden and it can move infinitely (you can use the dx and dy parameters of mousemoved to get the
+  movement amounts).
 - `lovr.mousepressed(x, y, button)` Called when a mouse button is pressed.
 - `lovr.mousereleased(x, y, button)` Called when a mouse button is released.
 - `lovr.mousemoved(x, y, dx, dy)` Called when the mouse is moved.  The arguments represent the new
