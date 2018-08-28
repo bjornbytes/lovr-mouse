@@ -18,6 +18,7 @@ ffi.cdef [[
   void glfwGetInputMode(GLFWwindow* window, int mode);
   void glfwSetInputMode(GLFWwindow* window, int mode, int value);
   void glfwGetCursorPos(GLFWwindow* window, double* x, double* y);
+  void glfwSetCursorPos(GLFWwindow* window, double x, double y);
   int glfwGetMouseButton(GLFWwindow* window, int button);
   GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
   GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
@@ -44,6 +45,20 @@ function mouse.getPosition()
   local x, y = ffi.new('double[1]'), ffi.new('double[1]')
   C.glfwGetCursorPos(window, x, y)
   return x[0], y[0]
+end
+
+function mouse.setX(x)
+  local y = mouse.getY()
+  C.glfwSetCursorPos(window, x, y)
+end
+
+function mouse.setY(y)
+  local x = mouse.getX()
+  C.glfwSetCursorPos(window, x, y)
+end
+
+function mouse.setPosition(x, y)
+  C.glfwSetCursorPos(window, x, y)
 end
 
 function mouse.isDown(button, ...)
