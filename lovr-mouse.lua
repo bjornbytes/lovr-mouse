@@ -2,12 +2,21 @@ local ffi = require 'ffi'
 local C = ffi.os == 'Windows' and ffi.load('glfw3') or ffi.C
 
 ffi.cdef [[
+  typedef enum {
+    GLFW_CURSOR = 0x00033001,
+    GLFW_CURSOR_NORMAL = 0x00034001,
+    GLFW_CURSOR_HIDDEN = 0x00034002,
+    GLFW_CURSOR_DISABLED = 0x00034003
+  } Constants;
+
   typedef struct GLFWwindow GLFWwindow;
   typedef void(*GLFWmousebuttonfun)(GLFWwindow*, int, int, int);
   typedef void(*GLFWcursorposfun)(GLFWwindow*, double, double);
   typedef void(*GLFWscrollfun)(GLFWwindow*, double, double);
 
   GLFWwindow* glfwGetCurrentContext(void);
+  void glfwGetInputMode(GLFWwindow* window, int mode);
+  void glfwSetInputMode(GLFWwindow* window, int mode, int value);
   void glfwGetCursorPos(GLFWwindow* window, double* x, double* y);
   int glfwGetMouseButton(GLFWwindow* window, int button);
   GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
@@ -40,6 +49,14 @@ end
 function mouse.isDown(button, ...)
   if not button then return false end
   return C.glfwGetMouseButton(window, button - 1) > 0 or mouse.isDown(...)
+end
+
+function mouse.getRelativeMode()
+  return C.glfwGetInputMode(window, C.GLFW_CURSOR) == C.GLFW_CURSOR_DISABLED
+end
+
+function mouse.setRelativeMode(enable)
+  C.glfwSetInputMode(window, C.GLFW_CURSOR, enable and C.GLFW_CURSOR_DISABLED or C.GLFW_CURSOR_NORMAL)
 end
 
 C.glfwSetMouseButtonCallback(window, function(target, button, action, mods)
