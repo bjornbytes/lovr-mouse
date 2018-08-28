@@ -34,6 +34,7 @@ API
 - `mouse.setRelativeMode(enable)` Sets or disables relative mode.  In relative mode the cursor is
   hidden and it can move infinitely (you can use the dx and dy parameters of mousemoved to get the
   movement amounts).
+- `mouse.getRelativeMode()` Returns whether relative mode is currently enabled.
 - `lovr.mousepressed(x, y, button)` Called when a mouse button is pressed.
 - `lovr.mousereleased(x, y, button)` Called when a mouse button is released.
 - `lovr.mousemoved(x, y, dx, dy)` Called when the mouse is moved.  The arguments represent the new
