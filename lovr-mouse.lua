@@ -20,6 +20,7 @@ ffi.cdef [[
   void glfwGetCursorPos(GLFWwindow* window, double* x, double* y);
   void glfwSetCursorPos(GLFWwindow* window, double x, double y);
   int glfwGetMouseButton(GLFWwindow* window, int button);
+  void glfwGetWindowSize(GLFWwindow* window, int* width, int* height);
   GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
   GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
   GLFWcursorposfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
@@ -29,36 +30,46 @@ local window = C.glfwGetCurrentContext()
 
 local mouse = {}
 
+-- Lovr uses framebuffer scale for everything, but glfw uses window scale for events.
+-- It is necessary to convert between the two at all boundaries.
+function mouse.getScale()
+  local x, _ = ffi.new('int[1]'), ffi.new('int[1]')
+  C.glfwGetWindowSize(window, x, _)
+  return lovr.graphics.getWidth()/x[0]
+end
+
 function mouse.getX()
   local x = ffi.new('double[1]')
   C.glfwGetCursorPos(window, x, nil)
-  return x[0]
+  return x[0] * mouse.getScale()
 end
 
 function mouse.getY()
   local y = ffi.new('double[1]')
   C.glfwGetCursorPos(window, nil, y)
-  return y[0]
+  return y[0] * mouse.getScale()
 end
 
 function mouse.getPosition()
   local x, y = ffi.new('double[1]'), ffi.new('double[1]')
+  local scale = mouse.getScale()
   C.glfwGetCursorPos(window, x, y)
-  return x[0], y[0]
+  return x[0] * scale, y[0] * scale
 end
 
 function mouse.setX(x)
   local y = mouse.getY()
-  C.glfwSetCursorPos(window, x, y)
+  local scale = mouse.getScale()
+  C.glfwSetCursorPos(window, x/scale, y/scale)
 end
 
 function mouse.setY(y)
   local x = mouse.getX()
-  C.glfwSetCursorPos(window, x, y)
+  C.glfwSetCursorPos(window, x/scale, y/scale)
 end
 
 function mouse.setPosition(x, y)
-  C.glfwSetCursorPos(window, x, y)
+  C.glfwSetCursorPos(window, x/scale, y/scale)
 end
 
 function mouse.isDown(button, ...)
@@ -84,6 +95,9 @@ end)
 local px, py = mouse.getPosition()
 C.glfwSetCursorPosCallback(window, function(target, x, y)
   if target == window then
+    local scale = mouse.getScale()
+    x = x * scale
+    y = y * scale
     lovr.event.push('mousemoved', x, y, x - px, y - py, false)
     px, py = x, y
   end
@@ -91,7 +105,8 @@ end)
 
 C.glfwSetScrollCallback(window, function(target, x, y)
   if target == window then
-    lovr.event.push('wheelmoved', x, y)
+    local scale = mouse.getScale()
+    lovr.event.push('wheelmoved', x*scale, y*scale)
   end
 end)
 
