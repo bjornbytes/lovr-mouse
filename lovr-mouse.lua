@@ -1,4 +1,6 @@
-local ffi = require 'ffi'
+local ffi = assert(type(jit) == 'table' and               -- Only run if we have LuaJIT
+  lovr.getOS() ~= 'Android' and lovr.getOS() ~= 'Web' and -- and also GLFW
+  require 'ffi', "lovr-mouse cannot run on this platform")
 local C = ffi.os == 'Windows' and ffi.load('glfw3') or ffi.C
 
 ffi.cdef [[
