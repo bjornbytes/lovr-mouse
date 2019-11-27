@@ -35,7 +35,7 @@ local mouse = {}
 function mouse.getScale()
   local x, _ = ffi.new('int[1]'), ffi.new('int[1]')
   C.glfwGetWindowSize(window, x, _)
-  return lovr.graphics.getWidth()/x[0]
+  return lovr.graphics.getWidth() / x[0]
 end
 
 function mouse.getX()
@@ -60,16 +60,18 @@ end
 function mouse.setX(x)
   local y = mouse.getY()
   local scale = mouse.getScale()
-  C.glfwSetCursorPos(window, x/scale, y/scale)
+  C.glfwSetCursorPos(window, x / scale, y / scale)
 end
 
 function mouse.setY(y)
   local x = mouse.getX()
-  C.glfwSetCursorPos(window, x/scale, y/scale)
+  local scale = mouse.getScale()
+  C.glfwSetCursorPos(window, x / scale, y / scale)
 end
 
 function mouse.setPosition(x, y)
-  C.glfwSetCursorPos(window, x/scale, y/scale)
+  local scale = mouse.getScale()
+  C.glfwSetCursorPos(window, x / scale, y / scale)
 end
 
 function mouse.isDown(button, ...)
@@ -106,7 +108,7 @@ end)
 C.glfwSetScrollCallback(window, function(target, x, y)
   if target == window then
     local scale = mouse.getScale()
-    lovr.event.push('wheelmoved', x*scale, y*scale)
+    lovr.event.push('wheelmoved', x * scale, y * scale)
   end
 end)
 
