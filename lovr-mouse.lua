@@ -30,7 +30,7 @@ ffi.cdef [[
   typedef void(*GLFWscrollfun)(GLFWwindow*, double, double);
 
   GLFWwindow* glfwGetCurrentContext(void);
-  void glfwGetInputMode(GLFWwindow* window, int mode);
+  int glfwGetInputMode(GLFWwindow* window, int mode);
   void glfwSetInputMode(GLFWwindow* window, int mode, int value);
   void glfwGetCursorPos(GLFWwindow* window, double* x, double* y);
   void glfwSetCursorPos(GLFWwindow* window, double x, double y);
