@@ -1,6 +1,5 @@
-local ffi = assert(type(jit) == 'table' and               -- Only run if we have LuaJIT
-  lovr.system.getOS() ~= 'Android' and lovr.system.getOS() ~= 'Web' and -- and also GLFW
-  require 'ffi', "lovr-mouse cannot run on this platform")
+assert(type(jit) == 'table' and lovr.system.getOS() ~= 'Android', 'lovr-mouse cannot run on this platform')
+local ffi = require 'ffi'
 local C = ffi.os == 'Windows' and ffi.load('glfw3') or ffi.C
 
 ffi.cdef [[
@@ -29,8 +28,8 @@ ffi.cdef [[
   typedef void(*GLFWcursorposfun)(GLFWwindow*, double, double);
   typedef void(*GLFWscrollfun)(GLFWwindow*, double, double);
 
-  GLFWwindow* glfwGetCurrentContext(void);
-  int glfwGetInputMode(GLFWwindow* window, int mode);
+  GLFWwindow* os_get_glfw_window(void);
+  void glfwGetInputMode(GLFWwindow* window, int mode);
   void glfwSetInputMode(GLFWwindow* window, int mode, int value);
   void glfwGetCursorPos(GLFWwindow* window, double* x, double* y);
   void glfwSetCursorPos(GLFWwindow* window, double x, double y);
@@ -44,7 +43,7 @@ ffi.cdef [[
   GLFWcursorposfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
 ]]
 
-local window = C.glfwGetCurrentContext()
+local window = ffi.C.os_get_glfw_window()
 
 local mouse = {}
 
@@ -53,7 +52,7 @@ local mouse = {}
 function mouse.getScale()
   local x, _ = ffi.new('int[1]'), ffi.new('int[1]')
   C.glfwGetWindowSize(window, x, _)
-  return lovr.graphics.getWidth() / x[0]
+  return lovr.system.getWindowWidth() / x[0]
 end
 
 function mouse.getX()
@@ -107,9 +106,9 @@ end
 
 function mouse.newCursor(source, hotx, hoty)
   if type(source) == 'string' or tostring(source) == 'Blob' then
-    source = lovr.data.newTextureData(source, false)
+    source = lovr.data.newImage(source, false)
   else
-    assert(tostring(source) == 'TextureData', 'Bad argument #1 to newCursor (TextureData expected)')
+    assert(tostring(source) == 'Image', 'Bad argument #1 to newCursor (Image expected)')
   end
   local image = ffi.new('GLFWimage', source:getWidth(), source:getHeight(), source:getPointer())
   return C.glfwCreateCursor(image, hotx or 0, hoty or 0)
