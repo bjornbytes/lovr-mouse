@@ -31,7 +31,7 @@ API
 - `mouse.getY()` Returns the y position of the cursor.
 - `mouse.getPosition()` Returns the x and y position of the cursor.
 - `mouse.setX(x)` Sets the x position of the cursor.
-- `mouse.getY(y)` Sets the y position of the cursor.
+- `mouse.setY(y)` Sets the y position of the cursor.
 - `mouse.setPosition(x, y)` Sets the position of the cursor.
 - `mouse.isDown(button, ...)` Returns whether any of the specified buttons are currently pressed.
   Available buttons:
