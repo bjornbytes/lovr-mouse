@@ -20,7 +20,15 @@ lovr-mouse can only run on systems where LÖVR uses both LuaJIT and GLFW. If you
 
 ```lua
 if type(jit) == 'table' and lovr.getOS() ~= 'Android' and lovr.getOS() ~= 'Web' then
-	lovr.mouse = require 'lovr-mouse'
+  lovr.mouse = require 'lovr-mouse'
+end
+```
+
+Note that `lovr.mouse.setRelativeMode` will conflict with the mouselook behavior of the VR simulator.  To fix it, add this to `conf.lua` to disable the headset module:
+
+```lua
+function lovr.conf(t)
+  t.modules.headset = false
 end
 ```
 
