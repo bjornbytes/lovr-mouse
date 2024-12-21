@@ -38,6 +38,7 @@ ffi.cdef [[
   void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
   int glfwGetMouseButton(GLFWwindow* window, int button);
   void glfwGetWindowSize(GLFWwindow* window, int* width, int* height);
+  void glfwDestroyCursor(GLFWcursor* cursor);
   GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
   GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
   GLFWcursorposfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
@@ -129,6 +130,10 @@ end
 
 function mouse.setCursor(cursor)
   C.glfwSetCursor(window, cursor)
+end
+
+function mouse.destroyCursor(cursor)
+  C.glfwDestroyCursor(cursor)
 end
 
 C.glfwSetMouseButtonCallback(window, function(target, button, action, mods)
