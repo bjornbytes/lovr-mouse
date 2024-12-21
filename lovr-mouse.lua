@@ -112,7 +112,7 @@ function mouse.newCursor(source, hotx, hoty)
     assert(tostring(source) == 'Image', 'Bad argument #1 to newCursor (Image expected)')
   end
   local image = ffi.new('GLFWimage', source:getWidth(), source:getHeight(), source:getPointer())
-  return C.glfwCreateCursor(image, hotx or 0, hoty or 0)
+  return ffi.gc(C.glfwCreateCursor(image, hotx or 0, hoty or 0), C.glfwDestroyCursor)
 end
 
 function mouse.getSystemCursor(kind)
@@ -125,15 +125,11 @@ function mouse.getSystemCursor(kind)
     sizens = C.GLFW_VRESIZE_CURSOR
   }
   assert(kinds[kind], string.format('Unknown cursor %q', tostring(kind)))
-  return C.glfwCreateStandardCursor(kinds[kind])
+  return ffi.gc(C.glfwCreateStandardCursor(kinds[kind]), C.glfwDestroyCursor)
 end
 
 function mouse.setCursor(cursor)
   C.glfwSetCursor(window, cursor)
-end
-
-function mouse.destroyCursor(cursor)
-  C.glfwDestroyCursor(cursor)
 end
 
 C.glfwSetMouseButtonCallback(window, function(target, button, action, mods)
