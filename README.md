@@ -51,6 +51,16 @@ API
   hidden and it can move infinitely (you can use the dx and dy parameters of mousemoved to get the
   movement amounts).
 - `mouse.getRelativeMode()` Returns whether relative mode is currently enabled.
+- `mouse.getSystemCursor(systemCursorKind)` Returns a Cursor UserData pointer which is GCed, so keep it in scope as long as you want to use it.
+  Available Cursor kinds:
+  - `arrow` Your regular system cursor. The pointy one.
+  - `ibeam` I style cursor. You see this kind when you hover over text.
+  - `crosshair` The + cursor.
+  - `hand` The hand, usually with the pointer finger raised.
+  - `sizewe` You see this cursor when you resize a window horizontally.
+  - `sizens` You see this cursor when you resize a window vertically.
+- `mouse.newCursor(string | blob | image, hotx, hoty)` Returns a Cursor UserData pointer which is GCed, so keep it in scope as long as you want to use it. `hotx` and `hoty` define the cursor's "hot spot" (where the little click pixel is).
+- `mouse.setCursor(cursor)` Sets the cursor. This is the Cursor UserData pointer returned from the `newCursor` and `getSystemCursor` functions. If the Cursor that you set gets GCed, it will reset back to the default Cursor automatically.
 - `lovr.mousepressed(x, y, button)` Called when a mouse button is pressed.
 - `lovr.mousereleased(x, y, button)` Called when a mouse button is released.
 - `lovr.mousemoved(x, y, dx, dy)` Called when the mouse is moved.  The arguments represent the new
