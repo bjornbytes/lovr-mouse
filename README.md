@@ -19,7 +19,7 @@ end
 lovr-mouse can only run on systems where LÖVR uses both LuaJIT and GLFW. If your project needs to be compatible with Android or WebVR, you can optionally include lovr-mouse with:
 
 ```lua
-if type(jit) == 'table' and lovr.getOS() ~= 'Android' and lovr.getOS() ~= 'Web' then
+if type(jit) == 'table' and lovr.system.getOS() ~= 'Android' and lovr.system.getOS() ~= 'Web' then
   lovr.mouse = require 'lovr-mouse'
 end
 ```
