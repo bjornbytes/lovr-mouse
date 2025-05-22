@@ -107,7 +107,7 @@ end
 
 function mouse.newCursor(source, hotx, hoty)
   if type(source) == 'string' or tostring(source) == 'Blob' then
-    source = lovr.data.newImage(source, false)
+    source = lovr.data.newImage(source)
   else
     assert(tostring(source) == 'Image', 'Bad argument #1 to newCursor (Image expected)')
   end
